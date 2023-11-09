@@ -93,8 +93,3 @@ static void __exit hello1_exit(void)
 
 module_init(hello1_init);
 module_exit(hello1_exit);
-
-MODULE_ALIAS("hello1");
-
-MODULE_ALIAS("hello1");
-

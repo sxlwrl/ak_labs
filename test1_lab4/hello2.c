@@ -72,6 +72,3 @@ static void __exit hello2_exit(void)
 
 module_init(hello2_init);
 module_exit(hello2_exit);
-
-MODULE_ALIAS("hello2");
-
