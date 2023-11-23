@@ -55,23 +55,24 @@ static LIST_HEAD(event_list);
 
 static int __init hello_init(void)
 {
+	int i;
+	
 	if (counter == 0 || (counter >= 5 && counter <= 10)) {
 		pr_warn("Помилка.\n");
 	}
 
 	if (counter > 10) {
-		pr_err("Помилка. Лічильник не може бути більше 10\n");
+		BUG_ON(1);
 		return -EINVAL;
 	}
 
-	int i;
-
 	for (i = 0; i < counter; i++) {
 		struct hello_event *event = kmalloc(sizeof(struct hello_event), GFP_KERNEL);
-
-		if (!event) {
-			return -ENOMEM;
+		
+		if (i == 3) {
+			event = 0;
 		}
+		
 		event->timestamp = ktime_get();
 		list_add(&event->list, &event_list);
 		printk(KERN_EMERG "Hello, world!\n");
@@ -96,3 +97,19 @@ static void __exit hello_exit(void)
 module_init(hello_init);
 module_exit(hello_exit);
 
+
+
+// export ARCH=arm
+
+// export PATH=/opt/gcc-arm-8.3-2019.03-x86_64-arm-linux-gnueabihf/bin:$PATH
+
+// export CROSS_COMPILE="ccache arm-linux-gnueabihf-"
+
+// export KDIR=$HOME/repos/linux-stable
+
+// ${CROSS_COMPILE}objdump -dS hello.ko.unstripped | less
+
+
+// ${CROSS_COMPILE}gdb -q hello.o
+
+// disas hello_init+0x86,hello_init+0x1000
